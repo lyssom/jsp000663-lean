@@ -1,0 +1,13 @@
+/.lake
+/build
+/lake-manifest.json.bak
+*.olean
+*.olean.hash
+*.ilean
+*.ilean.hash
+*.trace
+*.setup.json
+*.setup.json.hash
+.ccls-cache/
+.ccls/
+.cache/

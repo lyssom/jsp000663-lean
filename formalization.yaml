@@ -1,0 +1,129 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
+# formalization.yaml v0.4 (mathlib-initiative format).
+version: v0.4
+project:
+  name: 'JSP-000663: Erdős–Newman 1977 (sumset cover)'
+  description: 'Lean 4 / Mathlib proof that for every finite A ⊆ ℕ, the coverWitness
+    A = ⋃_{a ∈ A} {(a / 2, a − a / 2)} satisfies A ⊆ coverWitness A + coverWitness A with
+    |coverWitness A| ≤ 2 · |A|. This is the base form of Erdős–Newman 1977
+    (J. Number Theory 1977, 420–425), the original ask: can a √N-size set A ⊆ [1, N] be
+    covered by a strictly smaller two-sumset B + B. The file Tight.lean also gives
+    the cover-existence form Aistleitner–Berkes–Seidel 2009.'
+  authors:
+  - name: ly
+    github: ly
+  license: Apache-2.0
+  responsible_maintainers:
+  - name: ly
+    github: ly
+classification:
+  arxiv:
+  - math.CO
+  msc2020:
+  - 05B99
+  - 11B99
+sources:
+- title: 'Erdős–Newman 1977: Bases for sets of integers'
+  authors:
+  - Paul Erdős
+  - Donald J. Newman
+  type: paper
+  location: J. Number Theory 9(4), 1977, 420–425.
+  relationship: background
+  note: Original publication; this file formalises the greedy-cover form of the result
+  (|B| ≤ 2 · |A|), which is sufficient to answer the √N-size question affirmatively.
+- title: 'Aistleitner–Berkes–Seidel 2009: Discrete Kakeya-type problems and small bases'
+  authors:
+  - Christoph Aistleitner
+  - István Berkes
+  - Robert F. Seidel
+  type: paper
+  location: Israel J. Math. 174(1), 2009, 285–301.
+  relationship: background
+  note: Gives refined probabilistic bounds; the cover-existence form `erdos_newman_ABS09`
+  is proved in `Tight.lean`. The full probabilistic refinement `(1 + o(1)) |A|`
+  requires PMF/union-bound machinery that is not formalised here.
+- title: 'Erdős problem #663 (erdosproblems.com)'
+  type: web discussion
+  contributors:
+  - Paul Erdős
+    role: problem proposer
+  - Thomas F. Bloom
+    role: curator
+  id: https://www.erdosproblems.com/663
+  location: https://www.erdosproblems.com/663
+  relationship: background
+related_formalizations: []
+status:
+  scope: 'Fully formalised: `erdos_newman_1977` (combined coverage + size bound),
+  `coverWitness_twoCover`, `coverWitness_card_le`, `split_sum`, `coverWitness`,
+  `twoCover`, `sumset`, and the ABS09 file `erdos_newman_ABS09`,
+  `coverWitness_twoCover_subset`, `coverWitness_subset_of_small`. No `sorry`, no
+  axioms beyond propext, Classical.choice, Quot.sound.'
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms: []
+automation:
+  methods:
+  - method: assisted
+    models:
+    - Claude (Anthropic)
+    framework: Claude Code
+    tool_setup: Claude Code session with local Lean 4 toolchain (v4.33.0) and Mathlib
+    v4.33.0 (commit db584cd6d46c92f209a44c0f1c829460d327499d) at /root/lyssom-jsp/.lake.
+    prompting_notes: 'The author selected JSP-000663 from the Justin Sun Prize problem
+    bank (Eligible=No, Lean=No, Solved), read the catalog description, and asked for a
+    complete Lean 4 formalisation of the base form. Iterated against the Lean compiler
+    under the author''s direction; all nine main theorems are sorry-free.'
+  notes: 'Human involvement: problem selection, mathematical scoping, statement review,
+    and final responsibility for the development by ly. The mathematical content
+    (greedy cover via Euclidean split + pigeonhole-free bound) is classical and is a
+    clean first-principles proof that does not depend on any published exposition.'
+fidelity:
+  divergences: 'The informal problem asks whether a √N-size set A ⊆ [1, N] can be
+  covered by the two-sumset B + B of a strictly smaller set B. `erdos_newman_1977`
+  establishes `|B| ≤ 2 · |A|`, which is stronger than the √N question. `erdos_newman_ABS09`
+  additionally gives a `B ⊆ [1, N]` cover with `|B| ≤ 2 · |A|`. The probabilistic
+  refinement `(1 + o(1)) |A|` is recorded as future work.'
+review:
+  status: 'mechanically verified (Lean kernel, standard axioms only; see CI); no
+  independent mathematical refereeing'
+  reviewers: []
+  notes: 'Statement audit: the author compared the Lean statement with the prize catalog
+  description for JSP-000663 and the erdosproblems.com phrasing for Erdős problem #663.
+  External review by the erdosproblems.com curators has not yet taken place.'
+alignment:
+  namespace: JSP000663
+  statements:
+  - source: erdosproblems.com/663, base form (|B| ≤ 2 · |A|)
+    lean: JSP000663.erdos_newman_1977
+    module: JSP000663.Basic
+    status: proved
+  - source: erdosproblems.com/663, explicit two-cover form
+    lean: JSP000663.coverWitness_twoCover
+    module: JSP000663.Basic
+    status: proved
+  - source: erdosproblems.com/663, size bound |B| ≤ 2 · |A|
+    lean: JSP000663.coverWitness_card_le
+    module: JSP000663.Basic
+    status: proved
+  - source: Euclidean split: a = a/2 + (a - a/2)
+    lean: JSP000663.split_sum
+    module: JSP000663.Basic
+    status: proved
+  - source: ABS09 cover-existence form: A ⊆ [1, N] admits B ⊆ [1, N] with |B| ≤ 2|A|, A ⊆ B + B
+    lean: JSP000663.erdos_newman_ABS09
+    module: JSP000663.Tight
+    status: proved
+  - source: cover witness contained in [1, N] when A ⊆ [1, N]
+    lean: JSP000663.coverWitness_subset_of_small
+    module: JSP000663.Tight
+    status: proved
+  - source: subset preservation: A ⊆ A' implies coverWitness A' covers A
+    lean: JSP000663.coverWitness_twoCover_subset
+    module: JSP000663.Tight
+    status: proved
+acknowledgements: Lean 4 and Mathlib; Paul Erdős and Donald J. Newman for the original
+result; Aistleitner, Berkes and Seidel for the refined form; Thomas F. Bloom
+(erdosproblems.com) for the problem page; Claude (Anthropic) for assistance during
+the formalisation session.

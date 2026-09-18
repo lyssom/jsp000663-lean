@@ -1,0 +1,57 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Lean 4 toolchain
+        run: |
+          curl https://raw.githubusercontent.com/leanprover/elan/main/elan-init.sh -sSf | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Show toolchain
+        run: |
+          elan --version
+          lake --version
+
+      - name: Cache Mathlib oleans
+        uses: actions/cache@v4
+        with:
+          path: |
+             ~/.cache/mathlib
+             ~/.elan
+          key: ${{ runner.os }}-mathlib-v4.33.0
+          restore-keys: |
+             ${{ runner.os }}-mathlib-
+
+      - name: Fetch Mathlib cache
+        run: lake exe cache get
+
+      - name: Build
+        run: lake build JSP000663
+
+      - name: Axiom audit
+        run: |
+          if lake env lean scripts/check_axioms.lean 2>&1 | tee axiom-audit.log; then
+            echo "Axiom audit passed (only propext, Classical.choice, Quot.sound)"
+          else
+            echo "::error::Axiom audit failed"
+            exit 1
+          fi
+
+      - name: Verify no sorry
+        run: |
+          if grep -rn "sorry\|admit" JSP000663/ scripts/ 2>&1; then
+            echo "::error::Found sorry or admit"
+            exit 1
+          else
+            echo "No sorry/admit found - clean"
+          fi
