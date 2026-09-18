@@ -17,9 +17,9 @@ Per the `.github/ISSUE_TEMPLATE/claim-award.yml` and `.github/PULL_REQUEST_TEMPL
 |---|---|
 | Problem ID | `JSP-000663` (catalog `problems/catalog-0501-0600.md#JSP-000663`) |
 | Erdős reference | <https://www.erdosproblems.com/663> |
-| Lean repository | `https://github.com/<owner>/jsp000663-lean` |
+| Lean repository | `https://github.com/lyssom/jsp000663-lean` |
 | Branch | `main` |
-| Pinned commit | `<40-char SHA>` of the submission |
+| Pinned commit | `1728d95dce7212c2aa6dc1af2eaef66d8bc03eb7` (40 chars) |
 | Math statement | Erdős–Newman 1977, J. Number Theory 1977, 420–425 |
 | Theorem in repo | `JSP000663.erdos_newman_1977` |
 | Mathlib commit | `db584cd6d46c92f209a44c0f1c829460d327499d` |
@@ -55,9 +55,9 @@ Lean proof = No row to Yes with a complete, attributed proof and reproduction
 links, and adding an Attribution basis row.
 
 Proof source
-- Repository: https://github.com/<owner>/jsp000663-lean
+- Repository: https://github.com/lyssom/jsp000663-lean
 - Branch: main
-- Commit: <40-char SHA>
+- Commit: 1728d95dce7212c2aa6dc1af2eaef66d8bc03eb7
 
 Main theorems:
 - `JSP000663.erdos_newman_1977` (combined coverage + size bound)
@@ -98,7 +98,7 @@ Affected records: JSP-000663 only.
 ## Build & verify (for sanity)
 
 ```sh
-git clone https://github.com/<owner>/jsp000663-lean && cd jsp000663-lean
+git clone https://github.com/lyssom/jsp000663-lean && cd jsp000663-lean
 lake exe cache get
 lake build JSP000663
 lake env lean scripts/check_axioms.lean
